@@ -21,9 +21,31 @@ jobs:
               --template-file template.yml \
               --stack-name circleci-created-Stack-${CIRCLE_WORKFLOW_ID:0:5} \
               --region us-east-1
+
+  circleci_configure_infrastructure:
+  # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+  # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+    docker:
+      - image: python:3.7-alpine3.11
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - checkout
+      - add_ssh_keys:
+          # You can get this ID in the section where you registered the SSH Key
+          fingerprints: ["73:9f:36:ee:2d:4b:23:24:23:36:65:bf:78:54:58:46"] 
+      - run:
+          name: Install Ansible
+          command: apk add --update ansible
+      - run:
+          name: Run Playbook and Configure server
+          command: ansible-playbook -i inventory main-remote.yml
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   circleci_create_infrastructure-workflow:
     jobs:
       - circleci_create_infrastructure
+      - circleci_configure_infrastructure:
+          requires:
+            - circleci_create_infrastructure
