@@ -3,16 +3,16 @@
 version: 2.1
 create_cfn_infrastructure:
   docker:
-    - image: amazon/aws-cli0
+    - image: amazon/aws-cli
   checkout:
   run:
     name: " Creation of infrastructure using cloudformation"
     command: |
       aws cloudformation deploy \
       --template template.yml \
-      --stack-name demo_cicd_stack-${CIRCLE_WORKFLOW_ID:0:5} \
+      --stack-name demo_cicd_stack \
       --region us-east-1 
 workflows:
-  cfn-circleci-workflow:
+  cfn_circleci_workflow:
     jobs:
       - create_cfn_infrastructure
