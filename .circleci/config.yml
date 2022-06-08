@@ -10,7 +10,7 @@ create_cfn_infrastructure:
     command: |
       aws cloudformation deploy \
       --template template.yml \
-      --stack-name demo_cicd_stack \
+      --stack-name demo-cicd-stack \
       --region us-east-1 
 workflows:
   cfn_circleci_workflow:
