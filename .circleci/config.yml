@@ -45,7 +45,7 @@ jobs:
 workflows:
   circleci_create_infrastructure-workflow:
     jobs:
-      - circleci_create_infrastructure
-      - circleci_configure_infrastructure:
-          requires:
-            - circleci_create_infrastructure
+    # - circleci_create_infrastructure
+      - circleci_configure_infrastructure
+        # requires:
+          # - circleci_create_infrastructure
