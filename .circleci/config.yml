@@ -7,11 +7,7 @@ create_cfn_infrastructure:
   checkout:
   run:
     name: " Creation of infrastructure using cloudformation"
-    command: |
-      aws cloudformation deploy \
-      --template template.yml \
-      --stack-name demo-cicd-stack \
-      --region us-east-1 
+    command: echo "hello mbah"
 workflows:
   cfn_circleci_workflow:
     jobs:
