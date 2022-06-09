@@ -56,10 +56,8 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
-      - run: apk add --update curl
       - run:
-          name: smoke test
-          
+          name: smoke test 
         # Fail the job intentionally to simulate an error.
           command:  return 1
       - destroy_environment  
