@@ -4,6 +4,17 @@ version: 2.1
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+commands:
+   # Exercise - Rollback
+   destroy_environment:
+     steps:
+       - run:
+           name: Destroy environment
+           # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable 
+           # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 5 chars of the variable CIRCLE_CI_WORKFLOW_ID 
+           when: on_fail
+           command: |
+             aws cloudformation delete-stack --stack-name circleci-created-Stack-${CIRCLE_WORKFLOW_ID:0:5}
 jobs:
   circleci_create_infrastructure:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
@@ -48,21 +59,16 @@ jobs:
       - run: apk add --update curl
       - run:
           name: smoke test
-          command: |
-            URL="https://blog.udacity.com/"
-            # Test if website exists
-            if curl -s --head ${URL} 
-            then
-              return 0
-            else
-              return 1
-            fi
+          
+        # Fail the job intentionally to simulate an error.
+          command:  return 1
+      - destroy_environment  
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   circleci_create_infrastructure-workflow:
     jobs:
-    # - circleci_create_infrastructure
+      - circleci_create_infrastructure
     # - circleci_configure_infrastructure
         # requires:
           # - circleci_create_infrastructure
