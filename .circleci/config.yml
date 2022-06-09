@@ -70,5 +70,6 @@ workflows:
     # - circleci_configure_infrastructure
         # requires:
           # - circleci_create_infrastructure
-      - smoke_test
-
+      - smoke_test:
+          requires:
+            - circleci_create_infrastructure
